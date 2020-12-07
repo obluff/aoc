@@ -3,6 +3,7 @@ import scala.io.Source
 case class graphEdge(edgeName: String, edgeVal: Int)
 
 def extractBags(x: String): (String, List[graphEdge]) = {
+
     val bagPat = "(\\d+)? ([a-z]+ [a-z]+ bag)".r
     val firstBag = "([a-z]+ [a-z]+ bag)".r
     val node = firstBag.findFirstIn(x).getOrElse("")
@@ -21,21 +22,34 @@ def search(item: String,
            graphNodes: Map[String, List[graphEdge]],
            target: String,
            visited: Set[String]=Set()): Boolean = {
-    if(!graphNodes.contains(item)) return false
-    if(item == "no other bags") return false
-    if(item  == target) return true
-    val currComponents = graphNodes(item).map(_.edgeName)
-    if(currComponents.toSet.contains(target)) return true
-    return currComponents.map(search(_, graphNodes, target, visited | Set(item)))
+    if((!graphNodes.contains(item)) || (item == "no other bags")) {
+       return false
+    }
+
+    val edges = graphNodes(item).map(_.edgeName)
+
+    if(edges.toSet.contains(target)) {
+        return true
+    }
+
+    return edges.map(search(_, graphNodes, target, visited | Set(item)))
                          .filter(_ == true).size > 0
 }
 
 def numKids(item: String, graphNodes: Map[String, List[graphEdge]]): Int = {
-    if(!graphNodes.keys.toSet.contains(item)) return 0
-    if(item == "no other bags") return 0
-    val currComponents = graphNodes(item)
-    return currComponents.map(_.edgeVal).sum +
-           currComponents.map(e => e.edgeVal * (numKids(e.edgeName, graphNodes))).sum
+    /** slow :D  */
+
+    if((item == "no other bags") || (!graphNodes.contains(item))) {
+        return 0
+    }
+
+    if(!graphNodes.keys.toSet.contains(item)){ 
+         return 0
+    }
+
+    val edges = graphNodes(item)
+    return edges.map(_.edgeVal).sum +
+           edges.map(e => e.edgeVal * (numKids(e.edgeName, graphNodes))).sum
 }
 
 val graph =

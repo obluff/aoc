@@ -1,9 +1,10 @@
-from collections import defaultdict
 with open("input.txt", "r") as r:
-    asdf = r.read().split("\n")
-da_input = [int(x) for x in asdf if x] 
-num_ways = defaultdict(lambda: 0)
-for item in sorted(da_input):
+    input= r.read().split("\n")
+
+inp = [int(x) for x in input if x] 
+num_ways = [0 for i in range(max(inp) + 1)]
+
+for item in sorted(inp):
     if item == 1:
         num_ways[item] = 1
         continue
@@ -13,4 +14,4 @@ for item in sorted(da_input):
     for i in range(1, 4):
         num_ways[item] += num_ways[item - i]
         
-num_ways[max(da_input)]
+print(num_ways[-1])

@@ -1,6 +1,6 @@
 import scala.io.Source
 
-// q1 
+/* Q1 */
 
 val nextQ1 = (x: Array[Array[Char]]) => {
     padMatrix(x).sliding(3,1)
@@ -29,8 +29,8 @@ def updateRow(oneRow: Array[Array[Char]]): Array[Char] = {
           
 }
 
-/* Q2::: really wanted to avoid writing something 
-   like this in the first one but HERE WE ARE
+/* Q2::: really wanted to avoid doing the 8 direction thing
+         but HERE WE ARE
 **/
 
 val nextQ2 = (arr: Array[Array[Char]]) =>  {
@@ -52,7 +52,6 @@ def getAdjacent(dx: Int, dy: Int)(arr: Array[Array[Char]], x: Int, y: Int): Char
     return getAdjacent(dx, dy)(arr, x+dx, y+dy)
 }
 
-//literally fml so annoying
 val u = getAdjacent(-1, 0) _
 val d = getAdjacent(1, 0) _
 val l = getAdjacent(0, -1) _
@@ -73,15 +72,18 @@ def updateData(arr: Array[Array[Char]], x: Int, y: Int): Char = {
     
 }
 
-// utility
+/* utility */
+
+val countSeat = (x: Array[Array[Char]]) => {
+     x.flatten.count(_ == '#') 
+}
 
 def logAndReturn(first: Array[Array[Char]], f: Array[Array[Char]] => Array[Array[Char]]): Int = {
-   // least elegant but yolo
    val one = f(first)
    val two = f(one)
-   val count = one.flatten.count(_ == '#') 
-   println(count)
-   if(one.flatten.count(_ == '#') == two.flatten.count(_ == '#')) count else logAndReturn(two, f)
+   val count1 = countSeat(one)
+   val count2 = countSeat(two)
+   if(count1 == count2) count1 else logAndReturn(two, f)
 }
 
 
@@ -93,7 +95,6 @@ val input =
 
 val q1 = logAndReturn(input, nextQ1)
 val q2 = logAndReturn(input, nextQ2)
-
 
 println("q1", q1)
 println("q2", q2)

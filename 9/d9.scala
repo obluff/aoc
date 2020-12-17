@@ -13,7 +13,6 @@ val q1 =
    .map(_._2)
    .getOrElse(0)
  
-// laaazyy
 val q2 = (2 to input.size).view.map(input.sliding(_, 1)).flatten.find(_.sum == q1).map(x => x.min + x.max).getOrElse(0)
 
 println(q1)

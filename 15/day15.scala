@@ -1,6 +1,5 @@
 import scala.annotation.tailrec
 
-@tailrec
 def playGame(prev: Map[Int, Int], lastNum: Int, idx: Int, breakPoint: Int): Int = {
     if(idx % 10000000 == 0) {
         println(idx)
